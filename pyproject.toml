@@ -1,7 +1,7 @@
 [project]
-name = "langchain-prometheus-clinet-toolkit"
+name = "prometheus-clinet-toolkit"
 version = "0.1.0"
-description = "Add your description here"
+description = "A Simple Version of Async Prometheus Client"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
