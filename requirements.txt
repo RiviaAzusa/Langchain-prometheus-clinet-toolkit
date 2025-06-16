@@ -1,6 +1,0 @@
-requests
-dateparser
-pandas>=1.4.0
-numpy
-matplotlib
-httmock

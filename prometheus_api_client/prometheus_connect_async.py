@@ -5,7 +5,6 @@ import bz2
 import os
 import json
 import logging
-import numpy
 from datetime import datetime, timedelta
 import aiohttp
 from aiohttp import ClientTimeout, TCPConnector
@@ -520,6 +519,14 @@ class PrometheusConnectAsync:
         :param params: (dict) Optional dictionary containing GET parameters
         :returns: (dict) A dict of aggregated values received in response to the operations
         """
+        try:
+            import numpy
+        except ImportError:
+            raise ImportError(
+                "The numpy package is required for metric aggregation. "
+                "Please install it using 'pip install numpy'."
+            )
+
         if not isinstance(operations, list):
             raise TypeError("Operations can be only of type list")
         if len(operations) == 0:
@@ -562,7 +569,10 @@ class PrometheusConnectAsync:
             elif operation == "average":
                 aggregated_values["average"] = numpy.average(np_array)
             elif operation.startswith("percentile"):
-                percentile = float(operation.split("_")[1])
+                try:
+                    percentile = float(operation.split("_")[1])
+                except (IndexError, ValueError):
+                    raise TypeError(f"Invalid percentile operation format: {operation}")
                 aggregated_values["percentile_" + str(percentile)] = numpy.percentile(
                     query_values, percentile
                 )
